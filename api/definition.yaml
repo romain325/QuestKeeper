@@ -1,0 +1,7 @@
+openapi: 3.1.0
+info:
+  title: QuestKeeper
+  description: |
+    Role playing games app helping you during your session to control your player and party
+  version: 0.0.1
+paths:
