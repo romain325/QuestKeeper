@@ -14,3 +14,10 @@ components:
           type: string
         password:
           type: string
+    signupInfo:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string

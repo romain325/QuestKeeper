@@ -8,6 +8,15 @@ paths:
   /signup:
     post:
       summary: create a new account
+      requestBody:
+        content:
+          application/json:
+            $ref: 'model.yaml/#/components/schemas/signupInfo'
+      responses:
+        200:
+          description: account created
+        400:
+          description: already used username
   /login:
     post:
       summary: login to your account

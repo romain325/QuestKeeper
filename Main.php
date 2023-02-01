@@ -8,8 +8,7 @@ include "./src/AuthEndpoint.php";
 // value: function returning string
 $routes = [
     "GET/" => function() { return "<p>hello</p>"; },
-    "POST/login" => function() { return login(); },
-    "POST/disconnect" => function() {return disconnect(); },
+    ...getAuthRouterConfig()
 ];
 
 $router = new Router();
