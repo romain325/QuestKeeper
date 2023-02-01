@@ -16,7 +16,6 @@ function login() : string {
     if(sha1($_POST["password"]) == $user->getPassword()) {
         $checkAuth = $pdo->prepare("SELECT token FROM \"QuestKeeper\".authedclient WHERE user_id=?");
         $checkAuth->execute([$user->getId()]);
-        echo $checkAuth->rowCount();
         if($checkAuth->rowCount() > 0){
             return json_encode([
                 "user_id" => $user->getId(),
@@ -68,7 +67,6 @@ function signup() {
 
     $stmt = $pdo->prepare("INSERT INTO \"QuestKeeper\".user(name, password_hash) VALUES(?,?)");
     $stmt->execute([ $body["username"], sha1($body["password"]) ]);
-    echo json_encode($stmt->fetch());
     return json_encode([
         "message" => "account succesfully created",
         "username" => $body["username"]
