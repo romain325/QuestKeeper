@@ -84,3 +84,13 @@ CREATE TABLE "QuestKeeper".partyitems (
                                           CONSTRAINT partyitems_fk FOREIGN KEY (id_item) REFERENCES "QuestKeeper".item(id),
                                           CONSTRAINT partyitems_fk_1 FOREIGN KEY (id_party) REFERENCES "QuestKeeper".party(id)
 );
+
+CREATE TABLE "QuestKeeper".authedclient (
+                                            id text NOT NULL DEFAULT uuid_generate_v4(),
+                                            user_id text NOT NULL,
+                                            "token" text NOT NULL,
+                                            CONSTRAINT authedclient_pk PRIMARY KEY (id),
+                                            CONSTRAINT authedclient_un UNIQUE (user_id),
+                                            CONSTRAINT authedclient_deux UNIQUE ("token"),
+                                            CONSTRAINT authedclient_fk FOREIGN KEY (user_id) REFERENCES "QuestKeeper"."user"(id)
+);
