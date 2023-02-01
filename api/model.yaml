@@ -1,0 +1,16 @@
+components:
+  schemas:
+    loginInformation:
+      type: object
+      properties:
+        user_id:
+          type: string
+        token:
+          type: string
+    loginRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string

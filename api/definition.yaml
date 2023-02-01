@@ -5,3 +5,28 @@ info:
     Role playing games app helping you during your session to control your player and party
   version: 0.0.1
 paths:
+  /signup:
+    post:
+      summary: create a new account
+  /login:
+    post:
+      summary: login to your account
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            $ref: 'model.yaml/#/components/schemas/loginRequest'
+      responses:
+        200:
+          description: return your connection token
+          content:
+            application/json:
+              $ref: 'model.yaml/#/components/schemas/loginInformation'
+        301:
+          description: incorrect informations
+  /disconnect:
+    post:
+      summary: disconnect from your crent account
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            $ref: 'model.yaml/#/components/schemas/loginInformation'

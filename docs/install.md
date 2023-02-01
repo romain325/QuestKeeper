@@ -7,6 +7,10 @@ database: postgresql
 ## Backend
 
 install php  
+install php-pgsql  
+phpenmod pdo-pgsql
+phpenmod pgsql
+
 in cmd line run `php -S localhost:42069 Main.php`  
 version 7.4 
 
