@@ -7,12 +7,14 @@ include "./src/AuthEndpoint.php";
 // key: method . path
 // value: function returning string
 $routes = [
-    "GET/" => function() { return "<p>hello</p>"; },
     ...getAuthRouterConfig()
 ];
 
 $router = new Router();
 $router->setRouter($routes);
+$router->setAuthedRouter([
+    "GET/" => function() { return "<p>hello</p>"; },
+]);
 
 echo $router->render();
 die();
