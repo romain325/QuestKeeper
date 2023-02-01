@@ -28,11 +28,11 @@ class Router {
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         $request = $requestMethod . $requestUri;
 
-        if($this->router[$request]) {
+        if(array_key_exists($request, $this->router)) {
             return $this->router[$request]();
         }
 
-        if($this->authedRouter[$request]){
+        if(array_key_exists($request, $this->authedRouter)){
             if(isConnected()) {
                 return $this->authedRouter[$request]();
             } else {

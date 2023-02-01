@@ -1,13 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import {useCookies} from "vue3-cookies";
+import ConnectionView from "@/views/ConnectionView.vue";
 
+const isConnected = useCookies().cookies.get("Authorization");
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: isConnected ? HomeView : ConnectionView
     },
     {
       path: '/about',

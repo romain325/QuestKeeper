@@ -16,6 +16,19 @@ function getUserFromToken(string $token) : User {
     return new User($stmt->fetch());
 }
 
+/**
+ * @throws HttpHeaderException
+ */
+function getCurrentUser() : User {
+    $pdo = PDOService::getPDO();
+    $token = apache_request_headers()['Authorization'];
+    $token = explode(" ", $token);
+    if(count($token) < 2) throw new HttpHeaderException("invalid user");
+    $stmt = $pdo->prepare('SELECT u.* FROM "QuestKeeper".authedclient auth, "QuestKeeper".user u WHERE auth.token=? AND auth.user_id = u.id');
+    $stmt->execute([$token[1]]);
+    return new User($stmt->fetch());
+}
+
 function isConnected() : bool {
     $pdo = PDOService::getPDO();
     $token = apache_request_headers()['Authorization'];
