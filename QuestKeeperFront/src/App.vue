@@ -1,22 +1,31 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+import {computed, defineComponent} from 'vue'
+import {RouterLink, RouterView, useRouter} from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import {useCookies} from "vue3-cookies";
+import { useStore } from 'vuex';
 
 export default defineComponent({
   components: {
     HelloWorld, RouterLink, RouterView
   },
-  computed :{
-    auth: function() {
-      return useCookies().cookies.get("Authorization");
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    console.log(store)
+    return {
+      disconnect: () => {
+        store.commit('setToken', null);
+        router.push("/login");
+      },
+      token: computed(() => store.state.token)
     }
-  }
+  },
 });
+
 </script>
 
 <template>
+  <button class="btn" @click="disconnect()" v-if="token" >Disconnect</button>
   <RouterView />
   <footer class="btm-nav">
     <RouterLink to="/">
@@ -25,7 +34,7 @@ export default defineComponent({
     <RouterLink to="/about">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-1/3 w-1/3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     </RouterLink>
-    <RouterLink v-if="auth" to="/">
+    <RouterLink v-if="token" to="/">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-1/3 w-1/3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
     </RouterLink>
   </footer>
