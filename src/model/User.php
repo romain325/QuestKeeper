@@ -1,10 +1,13 @@
 <?php
 
+require_once $_SERVER["DOCUMENT_ROOT"]."src/service/PlayerService.php";
+
 class User
 {
-    private string $username;
-    private string $id;
+    public string $username;
+    public string $id;
     private string $password;
+    public Player|null $player = null;
     public function __construct(array $dbData)
     {
         if($dbData == null || $dbData["id"] == null){
@@ -13,6 +16,11 @@ class User
         $this->username = $dbData["name"];
         $this->id = $dbData["id"];
         $this->password = $dbData["password_hash"];
+
+        //WARN should use a factory because that looks disgusting
+        if($dbData["current_avatar"] != null) {
+            $this->player = getPlayerById($dbData["current_avatar"]);
+        }
     }
 
     /**
@@ -37,4 +45,14 @@ class User
     {
         return $this->password;
     }
+
+    /**
+     * @return Player|null
+     */
+    public function getPlayer(): ?Player
+    {
+        return $this->player;
+    }
+
+
 }
