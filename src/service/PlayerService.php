@@ -1,7 +1,7 @@
 <?php
 
 require_once $_SERVER["DOCUMENT_ROOT"]."src/model/Player.php";
-require_once "AuthService.php";
+include_once "AuthService.php";
 
 function getCurrentPlayer() : Player|null {
     try {
@@ -10,6 +10,30 @@ function getCurrentPlayer() : Player|null {
         error_log($e->getMessage());
         return null;
     }
+}
+
+function getUserPlayers(string $userId) : array {
+    $res = [];
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("SELECT player_id FROM \"QuestKeeper\".userplayer WHERE user_id=?");
+    $stmt->execute([$userId]);
+
+    while($row = $stmt->fetch()){
+        $res[] = getPlayerById($row["player_id"]);
+    }
+    return $res;
+}
+
+function setCurrentPlayer(string $userId, string $id) : bool {
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("UPDATE \"QuestKeeper\".user
+                                SET current_avatar=:playerId
+                                WHERE id=:userId;");
+    $stmt->execute([
+        "playerId" => $id,
+        "userId" => $userId
+    ]);
+    return $id;
 }
 
 function getPlayerById(string $id) : Player {

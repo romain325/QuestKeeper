@@ -31,7 +31,9 @@ function getCurrentUser() : User {
 
 function isConnected() : bool {
     $pdo = PDOService::getPDO();
-    $token = apache_request_headers()['Authorization'];
+    $headers = apache_request_headers();
+    if(!array_key_exists("Authorization", $headers)) return false;
+    $token = $headers['Authorization'];
     $token = explode(" ", $token);
     if(count($token) < 2) return false;
     $stmt = $pdo->prepare("SELECT count(1) FROM \"QuestKeeper\".authedclient WHERE token=?");

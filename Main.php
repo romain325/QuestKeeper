@@ -3,19 +3,19 @@
 include "./src/Router.php";
 include "./src/AuthEndpoint.php";
 include "./src/PlayerEndpoint.php";
+include "./src/PartyEndpoint.php";
 
 // route definition:
 // key: method . path
 // value: function returning string
-$routes = [
-    ...getAuthRouterConfig()
-];
-
 $router = new Router();
-$router->setRouter($routes);
+$router->setRouter([
+    ...getAuthRouterConfig()
+]);
 $router->setAuthedRouter([
     "GET/" => function() { return "<p>hello</p>"; },
-    ...getPlayerEndpointRoutes()
+    ...getPlayerEndpointRoutes(),
+    ...getPartyEndpointRoutes()
 ]);
 
 echo $router->render();

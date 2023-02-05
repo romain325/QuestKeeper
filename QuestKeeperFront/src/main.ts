@@ -2,12 +2,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import './assets/main.css'
 import {createStore} from "vuex";
+import router from './router'
 
 const app = createApp(App)
 const store = createStore({
     state() {
         return {
-            token: null as string|null
+            token: null as string|null,
+            party: null as string|null,
         }
     },
     mutations: {
@@ -19,7 +21,6 @@ const store = createStore({
 
 app.use(store)
 
-import router from './router'
 app.use(router)
 
 app.mount('#app')
