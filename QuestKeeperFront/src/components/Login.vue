@@ -48,7 +48,7 @@ export default defineComponent({
         url: "http://localhost/login",
         data: {
           login: this.username,
-          password: this.username
+          password: this.password
         },
         dataType: "application/x-www-form-urlencoded",
         async: false

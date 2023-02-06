@@ -19,6 +19,7 @@ version 7.4
 cd QuestKeeperFront  
 npm install  
 npm run dev
+npm run style
 
 for front-compoenents we use tailwindcss with daisyUI
 `npx tailwindcss -i ./src/assets/main.css -o ./dist/output.css --watch`

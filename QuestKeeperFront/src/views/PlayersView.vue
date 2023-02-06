@@ -69,6 +69,7 @@ export default defineComponent({
         "Authorization": "Bearer " + this.$store.state.token,
       }
     });
+    // HERE -> error if the currentPlayer doesn't exist
     if(resSelected.status == 200) {
       this.currentPlayer = (JSON.parse(resSelected.responseText) as Player).id;
       console.log(this.currentPlayer);
