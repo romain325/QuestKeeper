@@ -1,16 +1,20 @@
 <template>
+  <button class="btn" @click="this.$router.push('/players/create')">Create new player</button>
   <div class="drawer drawer-mobile h-full">
     <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col items-center justify-center">
       <!-- Page content here -->
       <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open Players</label>
       <h1 v-if="!selectedPlayer">No player selected</h1>
-      <PlayerComponent v-else :player="selectedPlayer" :current="selectedPlayer.id === currentPlayer" :on-selection-changed="changeCurrentPlayer" ></PlayerComponent>
+      <PlayerComponent v-else action-name="Select" :player="selectedPlayer" :current="selectedPlayer.id === currentPlayer" :on-action-button="changeCurrentPlayer" ></PlayerComponent>
     </div>
     <div class="drawer-side">
       <label for="my-drawer-2" class="drawer-overlay"></label>
       <ul class="menu p-4 w-80 bg-base-100 text-base-content" v-for="player of players">
-        <li :key="player.id" @click="this.selectedPlayer = player" :class="player.id === currentPlayer ? 'bg-base-300' : ''" ><a>{{player.name}}</a></li>
+        <li class="inline-flex flex-row flex-wrap justify-between" :key="player.id" @click="this.selectedPlayer = player" :class="player.id === currentPlayer ? 'bg-base-300' : ''" >
+          <a>{{player.name}}</a>
+          <button class="btn btn-circle" @click="deletePlayer(player.id)">-</button>
+        </li>
       </ul>
     </div>
   </div>
@@ -33,6 +37,17 @@ export default defineComponent({
     }
   },
   methods: {
+    deletePlayer(id :string) {
+      $.ajax({
+        method: "DELETE",
+        url: "http://localhost/player",
+        data: JSON.stringify({id}),
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token,
+        }
+      });
+      this.refreshPlayers();
+    },
     changeCurrentPlayer(id: string) {
       const res = $.ajax({
         method: "PUT",
@@ -46,34 +61,44 @@ export default defineComponent({
       if(res.status == 200) {
         this.currentPlayer = id;
       }
+    },
+    refreshPlayers() {
+      $.ajax({
+        method: "GET",
+        url: "http://localhost/players",
+        async: false,
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token,
+        },
+        complete: (res, status) => {
+          if(res.status == 200) {
+            this.players = JSON.parse(res.responseText);
+          }
+        }
+      });
+
+
+      $.ajax({
+        method: "GET",
+        url: "http://localhost/player",
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token,
+        },
+        complete: (res, status) => {
+          if(res.status == 200) {
+            this.currentPlayer = (JSON.parse(res.responseText) as Player).id;
+            this.selectedPlayer = JSON.parse(res.responseText);
+          }
+        }
+      });
+
+      if(!this.currentPlayer){
+        this.selectedPlayer = null;
+      }
     }
   },
   mounted() {
-    const res = $.ajax({
-      method: "GET",
-      url: "http://localhost/players",
-      async: false,
-      headers: {
-        "Authorization": "Bearer " + this.$store.state.token,
-      }
-    });
-    if(res.status == 200) {
-      this.players = JSON.parse(res.responseText);
-    }
-
-    const resSelected = $.ajax({
-      method: "GET",
-      url: "http://localhost/player",
-      async: false,
-      headers: {
-        "Authorization": "Bearer " + this.$store.state.token,
-      }
-    });
-    // HERE -> error if the currentPlayer doesn't exist
-    if(resSelected.status == 200) {
-      this.currentPlayer = (JSON.parse(resSelected.responseText) as Player).id;
-      console.log(this.currentPlayer);
-    }
+    this.refreshPlayers();
   }
 });
 </script>

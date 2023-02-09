@@ -35,10 +35,39 @@ function setCurrentPlayerEndpoint() : bool {
     }
 }
 
+function createPlayerEndpoint() : string {
+    $body = getJSONBody();
+    try {
+        $dbPlayer = createPlayer(new Player($body, $body["playerItems"], $body["playerStats"]), getCurrentUser()->getId());
+        if($dbPlayer){
+            return json_encode($dbPlayer);
+        } else {
+            http_response_code(400);
+            return json_encode([
+                "message" => "error while creating player"
+            ]);
+        }
+    } catch (HttpHeaderException $e) {
+        http_response_code(304);
+        return json_encode([
+            "message" => "error retrieving user"
+        ]);
+    }
+
+}
+
+function deletePlayerEndpoint() {
+    $body = getJSONBody();
+    deletePlayer($body["id"]);
+    return "";
+}
+
 function getPlayerEndpointRoutes() : array {
     return [
         "GET/player" => function() { return getCurrentUserPlayer(); },
         "GET/players" => function() { return getCurrentUserPlayers(); },
-        "PUT/player" => function() { return setCurrentPlayerEndpoint(); }
+        "PUT/player" => function() { return setCurrentPlayerEndpoint(); },
+        "POST/player" => function() { return createPlayerEndpoint(); },
+        "DELETE/player" => function() { return deletePlayerEndpoint(); }
     ];
 }

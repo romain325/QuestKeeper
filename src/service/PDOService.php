@@ -21,4 +21,9 @@ class PDOService {
         }
         return PDOService::$pdo;
     }
+
+    public static function getUUID() : string {
+        $pdo = PDOService::getPDO();
+        return $pdo->query("SELECT uuid_generate_v4() id;")->fetch()["id"];
+    }
 }

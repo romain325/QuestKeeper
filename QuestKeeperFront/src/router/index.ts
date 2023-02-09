@@ -27,12 +27,17 @@ const router = createRouter({
     {
       path: '/players',
       name: 'players',
-      component: () => import('../views/PlayersView.vue')
+      component: () => import('../views/PlayersView.vue'),
     },
     {
       path: '/party',
       name: 'party',
       component: () => import('../views/PlayersView.vue')
+    },
+    {
+      path: '/players/create',
+      name: 'create',
+      component: () => import('../views/CreatePlayerView.vue')
     }
   ]
 })
