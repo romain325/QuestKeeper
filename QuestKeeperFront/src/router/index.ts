@@ -38,6 +38,11 @@ const router = createRouter({
       path: '/players/create',
       name: 'create',
       component: () => import('../views/CreatePlayerView.vue')
+    },
+    {
+      path: '/party',
+      name: 'party',
+      component: () => import('../views/PartyView.vue')
     }
   ]
 })

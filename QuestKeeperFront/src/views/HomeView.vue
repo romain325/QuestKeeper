@@ -10,6 +10,7 @@ export default defineComponent({
     return {
       code: "",
       name: "",
+      error: ""
     }
   },
   methods: {
@@ -34,7 +35,24 @@ export default defineComponent({
       }
     },
     joinParty() {
-
+      if(!this.code) return;
+      $.ajax({
+        method: "POST",
+        url: "http://localhost/party/join",
+        data: JSON.stringify({"code": this.code}),
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token
+        },
+        contentType: "application/json",
+        complete: (res, status) => {
+          if(res.status == 200 && JSON.parse(res.responseText)?.result) {
+            this.$store.state.party = JSON.parse(res.responseText)?.result;
+            this.$router.push("/party");
+          } else {
+            this.error = JSON.parse(res.responseText)?.message;
+          }
+        }
+      })
     }
   }
 });

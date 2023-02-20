@@ -23,8 +23,35 @@ function createPartyEndpoint() :string {
     }
 }
 
+function joinPartyEndpoint() : string {
+    $body = getJSONBody();
+    if(!array_key_exists("code", $body)) {
+        http_response_code(400);
+        return json_encode([
+            "message" => "Missing party code"
+        ]);
+    }
+
+    try {
+        return json_encode([
+            "result" => joinParty($body["code"])
+        ]);
+    } catch (HttpHeaderException $e) {
+        http_response_code(500);
+        return json_encode([
+            "message" => "Error while creating party"
+        ]);
+    } catch (InvalidArgumentException $e) {
+        http_response_code(400);
+        return json_encode([
+            "message" => $e->getMessage()
+        ]);
+    }
+}
+
 function getPartyEndpointRoutes() : array {
     return [
         "POST/party" => function() { return createPartyEndpoint(); },
+        "POST/party/join" => function () { return joinPartyEndpoint(); }
     ];
 }
