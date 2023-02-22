@@ -137,3 +137,14 @@ function deletePlayer(string $id) {
     $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".player WHERE id=?");
     $stmt->execute([$id]);
 }
+
+function addItemToPlayer(string $playerId, string $itemId) : bool {
+    $pdo = PDOService::getPDO();
+    try {
+        $stmt = $pdo->prepare("INSERT INTO \"QuestKeeper\".inventory(id_player, id_item) VALUES(?,?);");
+        $stmt->execute([$playerId, $itemId]);
+    } catch (PDOException $e) {
+        return false;
+    }
+    return true;
+}

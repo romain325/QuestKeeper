@@ -62,12 +62,24 @@ function deletePlayerEndpoint() {
     return "";
 }
 
+function addItemToPlayerEndpoint() {
+    $body = getJSONBody();
+    // check request come from mj
+    if(addItemToPlayer($body["playerId"], $body["itemId"])) {
+        return json_encode(["success"=> "true"]);
+    } else {
+        http_response_code(500);
+        return json_encode(["message" => "error while inserting into inventory"]);
+    }
+}
+
 function getPlayerEndpointRoutes() : array {
     return [
         "GET/player" => function() { return getCurrentUserPlayer(); },
         "GET/players" => function() { return getCurrentUserPlayers(); },
         "PUT/player" => function() { return setCurrentPlayerEndpoint(); },
         "POST/player" => function() { return createPlayerEndpoint(); },
-        "DELETE/player" => function() { return deletePlayerEndpoint(); }
+        "DELETE/player" => function() { return deletePlayerEndpoint(); },
+        "PUT/player/item" => function() { return addItemToPlayerEndpoint(); }
     ];
 }

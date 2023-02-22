@@ -55,6 +55,7 @@ export default defineComponent({
       });
       if(res.status == 200) {
         const token = JSON.parse(res.responseText)["token"]
+        this.$store.state.user = JSON.parse(res.responseText)["user_id"];
         this.$store.commit("setToken", token);
         this.$router.push("/");
       } else {

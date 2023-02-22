@@ -27,7 +27,6 @@ export default defineComponent({
   },
   methods: {
     createPlayer(_: string) {
-      console.log(this.player)
       $.ajax({
         method: "POST",
         url: "http://localhost/player",

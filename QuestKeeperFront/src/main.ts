@@ -3,6 +3,7 @@ import App from './App.vue'
 import './assets/main.css'
 import {createStore} from "vuex";
 import router from './router'
+import {DndProvider} from "vue3-dnd";
 
 const app = createApp(App)
 const store = createStore({
@@ -10,6 +11,7 @@ const store = createStore({
         return {
             token: null as string|null,
             party: null as string|null,
+            user: null as string|null
         }
     },
     mutations: {
@@ -22,5 +24,6 @@ const store = createStore({
 app.use(store)
 
 app.use(router)
+
 
 app.mount('#app')

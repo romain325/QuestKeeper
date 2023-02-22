@@ -13,7 +13,7 @@ function generatePartyCode() : string {
  * @throws HttpHeaderException
  * @throws InvalidArgumentException
  */
-function joinParty(string $partyCode): bool {
+function joinParty(string $partyCode): string {
     $pdo = PDOService::getPDO();
     $stmt = $pdo->prepare("SELECT * FROM \"QuestKeeper\".party WHERE join_code=?");
     $stmt->execute([$partyCode]);
@@ -49,4 +49,58 @@ function createParty(string $name) : string {
     $stmt = $pdo->prepare("INSERT INTO \"QuestKeeper\".party(join_code, name, master) VALUES(?,?,?);");
     $stmt->execute([$code, $name, getCurrentUser()->getId()]);
     return $code;
+}
+
+function getPartyPlayers(string $partyId) : array {
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("SELECT id_player FROM \"QuestKeeper\".partyplayer WHERE id_party=?");
+    $stmt->execute([$partyId]);
+    $result = array();
+    while($row = $stmt->fetch()) {
+        $result[] = getPlayerById($row["id_player"]);
+    }
+    return $result;
+}
+
+/**
+ * @throws InvalidArgumentException, PDOException
+ */
+function getPartyMaster(string|null $code, string|null $id) : string {
+    $pdo = PDOService::getPDO();
+    if($code != null){
+        $stmt = $pdo->prepare("SELECT master FROM \"QuestKeeper\".party WHERE join_code=?");
+        $stmt->execute([$code]);
+        return $stmt->fetch()["master"];
+    } else if($id != null) {
+        $stmt = $pdo->prepare("SELECT master FROM \"QuestKeeper\".party WHERE id=?");
+        $stmt->execute([$id]);
+        return $stmt->fetch()["master"];
+    } else {
+        throw new InvalidArgumentException("missing either id or code");
+    }
+}
+
+function getPartyItems(string $id) : array {
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("SELECT i.* FROM \"QuestKeeper\".partyitems
+                                    INNER JOIN \"QuestKeeper\".item i on i.id = partyitems.id_item
+                                    WHERE id_party=?");
+    $stmt->execute([$id]);
+    $res = [];
+    while($item = $stmt->fetch()) {
+        $res[] = new Item($item);
+    }
+    return $res;
+}
+
+function addPartyItems(string $id, array $items) {
+    $pdo = PDOService::getPDO();
+    foreach($items as $item) {
+        try{
+            $stmt = $pdo->prepare("INSERT INTO \"QuestKeeper\".partyitems(id_party,id_item) VALUES(?,?)");
+            $stmt->execute([$id, $item]);
+        } catch (PDOException $e) {
+            continue;
+        }
+    }
 }

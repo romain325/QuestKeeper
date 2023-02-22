@@ -4,6 +4,7 @@ include "./src/Router.php";
 include "./src/AuthEndpoint.php";
 include "./src/PlayerEndpoint.php";
 include "./src/PartyEndpoint.php";
+include "./src/ItemsEndpoint.php";
 
 // route definition:
 // key: method . path
@@ -15,7 +16,8 @@ $router->setRouter([
 $router->setAuthedRouter([
     "GET/" => function() { return "<p>hello</p>"; },
     ...getPlayerEndpointRoutes(),
-    ...getPartyEndpointRoutes()
+    ...getPartyEndpointRoutes(),
+    ...getItemsEndpointRoutes()
 ]);
 
 echo $router->render();

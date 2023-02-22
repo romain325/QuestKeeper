@@ -1,5 +1,5 @@
 <template>
-  <div class="card lg:card-side bg-base-100 shadow-xl h-full">
+  <div class="card lg:card-side bg-base-100 shadow-xl h-full" :ref="drop">
     <figure class="w-1/3"><img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80" alt="Album"/></figure>
     <div class="card-body">
       <h2 class="card-title h-1/6">{{player.name}}</h2>
@@ -25,7 +25,6 @@
                   <div class="flex items-center space-x-3">
                     <div>
                       <div class="font-bold">{{stat.name}}</div>
-                      <div class="text-sm opacity-50">{{ stat.id }}</div>
                     </div>
                   </div>
                 </td>
@@ -66,7 +65,6 @@
                     </div>
                     <div>
                       <div class="font-bold">{{item.name}}</div>
-                      <div class="text-sm opacity-50">{{ item.id }}</div>
                     </div>
                   </div>
                 </td>
@@ -88,6 +86,8 @@
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
 import type Player from "@/models/Player";
+import {useDrop} from "vue3-dnd";
+import type Item from "@/models/Item";
 
 export default defineComponent({
   name: "PlayerComponent",
@@ -106,6 +106,10 @@ export default defineComponent({
       default: "Select"
     },
     onActionButton: Function,
+    onDrop: {
+      type: Function as PropType<(item: Item) => void>,
+      default: () => { console.log("drag&drop not enabled") }
+    }
   },
   data() {
     return {
@@ -113,6 +117,15 @@ export default defineComponent({
         name: "",
         value: ""
       }
+    }
+  },
+  setup(props) {
+    const [collect, drop] = useDrop({
+      accept: [ 'ITEM' ],
+      drop: props.onDrop,
+    })
+    return {
+      drop
     }
   },
   methods: {

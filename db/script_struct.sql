@@ -84,6 +84,7 @@ CREATE TABLE "QuestKeeper".partyitems (
                                           CONSTRAINT partyitems_fk FOREIGN KEY (id_item) REFERENCES "QuestKeeper".item(id),
                                           CONSTRAINT partyitems_fk_1 FOREIGN KEY (id_party) REFERENCES "QuestKeeper".party(id)
 );
+ALTER TABLE "QuestKeeper".partyitems ADD CONSTRAINT partyitems_un UNIQUE (id_item,id_party);
 
 CREATE TABLE "QuestKeeper".authedclient (
                                             id text NOT NULL DEFAULT uuid_generate_v4(),

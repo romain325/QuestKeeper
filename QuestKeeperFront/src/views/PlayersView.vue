@@ -12,7 +12,7 @@
       <label for="my-drawer-2" class="drawer-overlay"></label>
       <ul class="menu p-4 w-80 bg-base-100 text-base-content" v-for="player of players">
         <li class="inline-flex flex-row flex-wrap justify-between" :key="player.id" @click="this.selectedPlayer = player" :class="player.id === currentPlayer ? 'bg-base-300' : ''" >
-          <a>{{player.name}}</a>
+          <a>{{player?.name}}</a>
           <button class="btn btn-circle" @click="deletePlayer(player.id)">-</button>
         </li>
       </ul>
@@ -31,7 +31,7 @@ export default defineComponent({
   components: {PlayerComponent},
   data() {
     return {
-      currentPlayer: null as string|null,
+      currentPlayerId: null as string|null,
       selectedPlayer: null as Player|null,
       players: [] as Player[],
     }
@@ -92,7 +92,7 @@ export default defineComponent({
         }
       });
 
-      if(!this.currentPlayer){
+      if(!this.currentPlayerId){
         this.selectedPlayer = null;
       }
     }
