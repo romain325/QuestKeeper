@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"]."src/service/PlayerService.php";
+require_once $_SERVER["DOCUMENT_ROOT"]."/src/service/PlayerService.php";
 
 class User
 {

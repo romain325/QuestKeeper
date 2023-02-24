@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"]."src/model/Player.php";
+require_once $_SERVER["DOCUMENT_ROOT"]."/src/model/Player.php";
 include_once "AuthService.php";
 
 function getCurrentPlayer() : Player|null {
