@@ -65,7 +65,7 @@ function getPartyMasterEndpoint() : string {
 
     try {
         return json_encode([
-            "master" => getPartyMaster($body["code"], $body["id"])
+            "master" => getPartyMaster(array_key_exists("code", $body) ? $body["code"] : null,array_key_exists("id", $body) ?  $body["id"]: null)
         ]);
     }catch (InvalidArgumentException | PDOException $e) {
         return json_encode([
