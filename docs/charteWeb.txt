@@ -1,0 +1,13 @@
+colors
+
+-C97B84 (201,123,132)	lighter
+-A85751	(168,87,81) principal
+-7D2E68 (125,46,104)
+-251351 (37,19,81) secondary
+-040926 (4,9,38)	darker
+
+-FFF9E2 (255,249,226) Text
+
+Font:
+Title:Montserrat-Bold
+Core: NutinoSans-ExtraLight

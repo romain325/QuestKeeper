@@ -25,6 +25,7 @@ import {defineComponent} from "vue";
 import * as $ from 'jquery';
 import type Player from "@/models/Player";
 import PlayerComponent from "@/components/PlayerComponent.vue";
+import ENVIRONMENT from "@/assets/Environement";
 
 export default defineComponent({
   name: "PlayersView",
@@ -40,7 +41,7 @@ export default defineComponent({
     deletePlayer(id :string) {
       $.ajax({
         method: "DELETE",
-        url: "http://localhost/player",
+        url: ENVIRONMENT.backendUrl + "/player",
         data: JSON.stringify({id}),
         headers: {
           "Authorization": "Bearer " + this.$store.state.token,
@@ -51,7 +52,7 @@ export default defineComponent({
     changeCurrentPlayer(id: string) {
       const res = $.ajax({
         method: "PUT",
-        url: "http://localhost/player",
+        url: ENVIRONMENT.backendUrl + "/player",
         async: false,
         data: JSON.stringify({id}),
         headers: {
@@ -65,7 +66,7 @@ export default defineComponent({
     refreshPlayers() {
       $.ajax({
         method: "GET",
-        url: "http://localhost/players",
+        url: ENVIRONMENT.backendUrl + "/players",
         async: false,
         headers: {
           "Authorization": "Bearer " + this.$store.state.token,
@@ -80,7 +81,7 @@ export default defineComponent({
 
       $.ajax({
         method: "GET",
-        url: "http://localhost/player",
+        url: ENVIRONMENT.backendUrl + "/player",
         headers: {
           "Authorization": "Bearer " + this.$store.state.token,
         },

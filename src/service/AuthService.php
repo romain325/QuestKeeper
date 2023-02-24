@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"]."src/model/User.php";
+require_once $_SERVER["DOCUMENT_ROOT"]."/src/model/User.php";
 
 function getUserFromName(string $name) : User {
     $pdo = PDOService::getPDO();
