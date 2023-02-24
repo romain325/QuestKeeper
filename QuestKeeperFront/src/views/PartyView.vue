@@ -66,6 +66,7 @@ import type Player from "@/models/Player";
 import * as $ from 'jquery';
 import ItemDisplay from "@/components/ItemDisplay.vue";
 import type Item from "@/models/Item";
+import ENVIRONMENT from "@/assets/Environement";
 
 export default defineComponent({
   name: "PartyView",
@@ -79,7 +80,7 @@ export default defineComponent({
 
     const res = $.ajax({
       method: "POST",
-      url: "http://localhost/party/master",
+      url: ENVIRONMENT.backendUrl + "/party/master",
       data: JSON.stringify({id: this.$store.state.party}),
       headers: {
         "Authorization": "Bearer " + this.$store.state.token
@@ -110,7 +111,7 @@ export default defineComponent({
     addToPartyItems() {
       $.ajax({
         method: "PUT",
-        url: "http://localhost/party/items",
+        url: ENVIRONMENT.backendUrl + "/party/items",
         data: JSON.stringify({
           id: this.$store.state.party,
           items: this.selectedItems
@@ -131,7 +132,7 @@ export default defineComponent({
     onPlayerDrop(playerId: string, item: Item) {
       $.ajax({
         method: "PUT",
-        url: "http://localhost/player/item",
+        url: ENVIRONMENT.backendUrl + "/player/item",
         data: JSON.stringify({
           playerId: playerId,
           itemId: item.id
@@ -145,7 +146,7 @@ export default defineComponent({
   mounted() {
     $.ajax({
       method: "POST",
-      url: "http://localhost/party/players",
+      url: ENVIRONMENT.backendUrl + "/party/players",
       data: JSON.stringify({id: this.$store.state.party}),
       headers: {
         "Authorization": "Bearer " + this.$store.state.token
@@ -163,7 +164,7 @@ export default defineComponent({
     if(!this.isMaster){
       $.ajax({
         method: "GET",
-        url: "http://localhost/player",
+        url: ENVIRONMENT.backendUrl + "/player",
         headers: {
           "Authorization": "Bearer " + this.$store.state.token
         },
@@ -178,7 +179,7 @@ export default defineComponent({
     } else {
       $.ajax({
         method: "POST",
-        url: "http://localhost/party/items",
+        url: ENVIRONMENT.backendUrl + "/party/items",
         data: JSON.stringify({id: this.$store.state.party }),
         headers: {
           "Authorization": "Bearer " + this.$store.state.token
@@ -217,7 +218,7 @@ export default defineComponent({
     allItems() : Item[] {
       const res = $.ajax({
         method: "GET",
-        url: "http://localhost/items",
+        url: ENVIRONMENT.backendUrl + "/items",
         async: false,
         headers: {
           "Authorization": "Bearer " + this.$store.state.token

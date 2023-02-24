@@ -7,6 +7,7 @@ import {defineComponent} from "vue";
 import type Player from "@/models/Player";
 import PlayerComponent from "@/components/PlayerComponent.vue";
 import * as $ from 'jquery';
+import ENVIRONMENT from "@/assets/Environement";
 
 export default defineComponent({
   name: "CreatePlayerView",
@@ -29,7 +30,7 @@ export default defineComponent({
     createPlayer(_: string) {
       $.ajax({
         method: "POST",
-        url: "http://localhost/player",
+        url: ENVIRONMENT.backendUrl + "/player",
         data: JSON.stringify(this.player),
         dataType: "json",
         headers: {

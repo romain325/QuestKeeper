@@ -3,6 +3,7 @@
 import {defineComponent} from "vue";
 import TheWelcome from '../components/TheWelcome.vue'
 import * as $ from 'jquery';
+import ENVIRONMENT from "@/assets/Environement";
 
 export default defineComponent({
   components: {TheWelcome},
@@ -18,7 +19,7 @@ export default defineComponent({
       if(!this.name) return;
       const res = $.ajax({
         method: "POST",
-        url: "http://localhost/party",
+        url: ENVIRONMENT.backendUrl + "/party",
         data: JSON.stringify({ "name" : this.name}),
         dataType: "json",
         headers: {
@@ -38,7 +39,7 @@ export default defineComponent({
       if(!this.code) return;
       $.ajax({
         method: "POST",
-        url: "http://localhost/party/join",
+        url: ENVIRONMENT.backendUrl + "/party/join",
         data: JSON.stringify({"code": this.code}),
         headers: {
           "Authorization": "Bearer " + this.$store.state.token

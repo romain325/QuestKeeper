@@ -25,6 +25,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import * as $ from "jquery";
+import ENVIRONMENT from "@/assets/Environement";
 
 export default defineComponent({
   name: "Signup",
@@ -43,7 +44,7 @@ export default defineComponent({
       }
       const res = $.ajax({
         method: "POST",
-        url: "http://localhost/signup",
+        url: ENVIRONMENT.backendUrl + "/signup",
         data: JSON.stringify({
           username: this.username,
           password: this.username

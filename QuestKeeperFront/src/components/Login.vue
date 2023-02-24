@@ -25,6 +25,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import * as $ from "jquery";
+import ENVIRONMENT from "@/assets/Environement.ts";
 
 export default defineComponent({
   name: "Login",
@@ -45,7 +46,7 @@ export default defineComponent({
       this.isLoading = true;
       const res = $.ajax({
         method: "POST",
-        url: "http://localhost/login",
+        url: ENVIRONMENT.backendUrl + "/login",
         data: {
           login: this.username,
           password: this.password
