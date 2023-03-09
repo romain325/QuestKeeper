@@ -71,6 +71,9 @@
                 <td>
                   <p>{{item.description}}</p>
                 </td>
+                <td v-if="editableInventory">
+                  <button class="btn btn-circle btn-outline" @click="removeItem(item.id, player.id)"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -88,6 +91,8 @@ import type {PropType} from "vue";
 import type Player from "@/models/Player";
 import {useDrop} from "vue3-dnd";
 import type Item from "@/models/Item";
+import ENVIRONMENT from "@/assets/Environement";
+import * as $ from "jquery";
 
 export default defineComponent({
   name: "PlayerComponent",
@@ -104,6 +109,10 @@ export default defineComponent({
     actionName: {
       type: String,
       default: "Select"
+    },
+    editableInventory: {
+      type: Boolean,
+      default: false,
     },
     onActionButton: Function,
     onDrop: {
@@ -137,6 +146,17 @@ export default defineComponent({
       });
       this.stat.name = "";
       this.stat.value = "";
+    },
+
+    removeItem(itemId: string, playerId: string) {
+      $.ajax({
+        method: "DELETE",
+        data: JSON.stringify({itemId, playerId}),
+        url: ENVIRONMENT.backendUrl + "/player/item",
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token
+        },
+      });
     }
   }
 })

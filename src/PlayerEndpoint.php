@@ -73,6 +73,17 @@ function addItemToPlayerEndpoint() {
     }
 }
 
+function deletePlayerItemEndpoint() : string {
+    $body = getJSONBody();
+    try {
+        removeItemFromPlayer($body["itemId"], $body["playerId"]);
+        return json_encode(["success" => true]);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        return json_encode(["message" => $e->getMessage()]);
+    }
+}
+
 function getPlayerEndpointRoutes() : array {
     return [
         "GET/player" => function() { return getCurrentUserPlayer(); },
@@ -80,6 +91,7 @@ function getPlayerEndpointRoutes() : array {
         "PUT/player" => function() { return setCurrentPlayerEndpoint(); },
         "POST/player" => function() { return createPlayerEndpoint(); },
         "DELETE/player" => function() { return deletePlayerEndpoint(); },
+        "DELETE/player/item" => function() { return deletePlayerItemEndpoint(); },
         "PUT/player/item" => function() { return addItemToPlayerEndpoint(); }
     ];
 }

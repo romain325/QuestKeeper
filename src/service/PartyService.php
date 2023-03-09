@@ -104,3 +104,22 @@ function addPartyItems(string $id, array $items) {
         }
     }
 }
+
+/**
+ * @param string $id
+ * @return void
+ * @throws Exception
+ */
+function deleteParty(string $id) {
+    if(getPartyMaster(null, $id) != getCurrentUser()->getId()) {
+        throw new Exception("You're not the master of this party");
+    }
+
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".partyitems WHERE id_party=?");
+    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".partyplayer WHERE id_party=?");
+    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".party WHERE id=?");
+    $stmt->execute([$id]);
+}
