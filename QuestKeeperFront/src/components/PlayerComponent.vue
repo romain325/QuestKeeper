@@ -143,5 +143,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+img {
+  max-width: 100%;
+  height: auto;
+  padding: 5px;
+  border-radius: 10px;
+}
 </style>

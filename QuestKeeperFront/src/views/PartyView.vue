@@ -232,5 +232,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.w-1\/2 {
+  width: 50%;
+  padding: 10px;
+}
 </style>
