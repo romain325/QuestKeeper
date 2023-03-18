@@ -32,7 +32,8 @@
           </div>
         </div>
         <div class="w-full h-1/3">
-
+          <button class="btn" @click="dissolve()">Dissolve</button>
+          <button class="btn">hello</button>
         </div>
       </div>
 
@@ -45,7 +46,7 @@
         </div>
         <div class="carousel w-full h-4/5">
           <div :id="'slide' + index" class="carousel-item relative w-full overflow-y-scroll" v-for="(player, index) of otherPlayers">
-            <PlayerComponent :player="player" @drop="onPlayerDrop(player.id, $event)" />
+            <PlayerComponent :player="player" @drop="onPlayerDrop(player.id, $event)" :editable-inventory="isMaster" />
           </div>
         </div>
       </div>
@@ -98,6 +99,19 @@ export default defineComponent({
 
   },
   methods: {
+    dissolve() {
+      $.ajax({
+        method:"DELETE",
+        url: ENVIRONMENT.backendUrl + "/party",
+        data: JSON.stringify({
+          id: this.$store.state.party,
+        }),
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token
+        },
+      });
+    },
+    kickPlayer() {},
     addItemToSelection(item: Item) {
       if(this.selectedItems.includes(item.id)) {
         this.selectedItems.splice(this.selectedItems.indexOf(item.id), 1);
@@ -141,26 +155,33 @@ export default defineComponent({
           "Authorization": "Bearer " + this.$store.state.token
         },
       });
-    }
-  },
-  mounted() {
-    $.ajax({
-      method: "POST",
-      url: ENVIRONMENT.backendUrl + "/party/players",
-      data: JSON.stringify({id: this.$store.state.party}),
-      headers: {
-        "Authorization": "Bearer " + this.$store.state.token
-      },
-      complete: (res, status) => {
-        if(res.status != 200) {
-          // error
-          console.error(res);
-        } else {
-          this.players = JSON.parse(res.responseText);
-        }
-      }
-    });
+    },
+    setRefreshInterval() {
+      this.interKey = setInterval(() => {
+        // refresh players by requesting /party/players
+        $.ajax({
+          method: "POST",
+          url: ENVIRONMENT.backendUrl + "/party/players",
+          data: JSON.stringify({id: this.$store.state.party}),
+          headers: {
+            "Authorization": "Bearer " + this.$store.state.token
+          },
+          complete: (res, status) => {
+            if(res.status != 200) {
+              // error
+              console.error(res);
+            } else {
+              this.players = JSON.parse(res.responseText);
+            }
+          }
+        });
+      }, 1000);
+    },
 
+  },
+
+  mounted() {
+    this.setRefreshInterval();
     if(!this.isMaster){
       $.ajax({
         method: "GET",
@@ -201,6 +222,7 @@ export default defineComponent({
       currentPlayerId: "",
       selectedItems: [] as string[],
       partyItems: [] as Item[],
+      interKey: -1,
     }
   },
   computed: {
@@ -225,6 +247,13 @@ export default defineComponent({
         },
       });
       return JSON.parse(res.responseText);
+    }
+  },
+
+  unmounted() {
+    if(this.interKey != -1) {
+      clearInterval(this.interKey);
+      this.interKey = -1;
     }
   }
 

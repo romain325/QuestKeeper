@@ -148,3 +148,17 @@ function addItemToPlayer(string $playerId, string $itemId) : bool {
     }
     return true;
 }
+
+/**
+ * @throws PDOException
+ */
+function removeItemFromPlayer(string $itemId, string $playerId) {
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".inventory
+                                WHERE id = 
+                                      (SELECT id FROM \"QuestKeeper\".inventory where 
+                                       id_item=? and id_player=? 
+                                      limit 1);
+                            ");
+    $stmt->execute([$itemId, $playerId]);
+}
