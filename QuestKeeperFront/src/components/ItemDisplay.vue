@@ -26,7 +26,6 @@ export default defineComponent({
     }
   },
   setup(props : any) {
-    console.log(props)
     const [collectedDrops, drag]  = useDrag(() => ({
       type: props.drag ? 'ITEM' : 'UNAUTHORIZED',
       item: { id: props.item.id }

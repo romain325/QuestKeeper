@@ -60,7 +60,7 @@
                   <div class="flex items-center space-x-3">
                     <div class="avatar">
                       <div class="mask mask-squircle w-12 h-12">
-                        <img src="/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
+                        <img src="https://media.discordapp.net/attachments/1067816772000022609/1068482857565171742/Illustration_sans_titre.png?width=504&height=504" alt="Avatar Tailwind CSS Component" />
                       </div>
                     </div>
                     <div>

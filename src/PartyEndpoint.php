@@ -108,6 +108,18 @@ function deletePartyEndpoint() : string {
     return json_encode(["message" => "success"]);
 }
 
+function deletePartyPlayerEndpoint() : string {
+    $body = getJSONBody();
+    try {
+        removePlayerFromParty($body["party"], $body["player"]);
+    } catch (Exception $e) {
+        http_response_code(400);
+        return json_encode(["message" => $e->getMessage()]);
+    }
+
+    return json_encode(["message" => "success"]);
+}
+
 function getPartyEndpointRoutes() : array {
     return [
         "DELETE/party" => function() { return deletePartyEndpoint(); },
@@ -117,5 +129,6 @@ function getPartyEndpointRoutes() : array {
         "POST/party/master" => function() { return getPartyMasterEndpoint(); },
         "POST/party/items" => function() { return getPartyItemsEndpoint(); },
         "PUT/party/items" => function() { return addPartyItemsEndpoint(); },
+        "DELETE/party/player" => function() { return deletePartyPlayerEndpoint(); }
     ];
 }

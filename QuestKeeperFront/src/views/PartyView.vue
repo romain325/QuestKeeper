@@ -32,8 +32,13 @@
           </div>
         </div>
         <div class="w-full h-1/3">
+          <input type="text" placeholder="Name" class="input input-ghost w-full max-w-xs" name="item_name" v-model="newItemName" />
+          <input type="text" placeholder="Desc" class="input input-ghost w-full max-w-xs" name="item_desc" v-model="newItemDesc"/>
+          <button class="btn" @click="createItem()">Create new item</button>
+          <hr>
           <button class="btn" @click="dissolve()">Dissolve</button>
-          <button class="btn">hello</button>
+          <hr>
+          <button v-for="player of players" class="btn" @click="kickPlayer(player.id)">Kick {{player.name}}</button>
         </div>
       </div>
 
@@ -111,7 +116,19 @@ export default defineComponent({
         },
       });
     },
-    kickPlayer() {},
+    kickPlayer(id: string) {
+      $.ajax({
+        method: "DELETE",
+        url: ENVIRONMENT.backendUrl + "/party/player",
+        data: JSON.stringify({
+          party: this.$store.state.party,
+          player: id
+        }),
+        headers: {
+          "Authorization": "Bearer " + this.$store.state.token
+        }
+      })
+    },
     addItemToSelection(item: Item) {
       if(this.selectedItems.includes(item.id)) {
         this.selectedItems.splice(this.selectedItems.indexOf(item.id), 1);
@@ -121,6 +138,28 @@ export default defineComponent({
     },
     resetSelection() {
       this.selectedItems = [];
+    },
+    createItem() {
+      if(this.newItemName != "") {
+        $.ajax({
+          method: "POST",
+          url: ENVIRONMENT.backendUrl + "/item",
+          data: JSON.stringify({
+            name: this.newItemName,
+            desc: this.newItemDesc
+          }),
+          headers: {
+            "Authorization": "Bearer " + this.$store.state.token
+          },
+          complete: (res, status) => {
+            // refresh itemss by changing a value that is referenced in the computed "allItems"
+            this.forceRefresher++;
+            alert("item created");
+          }
+        })
+      } else {
+        alert("No name nor description provided");
+      }
     },
     addToPartyItems() {
       $.ajax({
@@ -223,6 +262,9 @@ export default defineComponent({
       selectedItems: [] as string[],
       partyItems: [] as Item[],
       interKey: -1,
+      newItemName: "",
+      newItemDesc: "",
+      forceRefresher: 0,
     }
   },
   computed: {
@@ -238,6 +280,7 @@ export default defineComponent({
       return this.players.filter(x => x.id != this.currentPlayerId);
     },
     allItems() : Item[] {
+      this.forceRefresher;
       const res = $.ajax({
         method: "GET",
         url: ENVIRONMENT.backendUrl + "/items",

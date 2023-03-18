@@ -123,3 +123,9 @@ function deleteParty(string $id) {
     $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".party WHERE id=?");
     $stmt->execute([$id]);
 }
+
+function removePlayerFromParty(string $party, string $player) : void {
+    $pdo = PDOService::getPDO();
+    $stmt = $pdo->prepare("DELETE FROM \"QuestKeeper\".partyplayer WHERE id_party=? AND id_player=?;");
+    $stmt->execute([$party, $player]);
+}
