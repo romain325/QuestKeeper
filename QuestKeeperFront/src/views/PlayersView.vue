@@ -105,5 +105,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+  button {
+    margin: 5px;
+  }
 
+  .drawer-side {
+    margin: 5px;
+  }
+  .drawer-content {
+    margin: 5px;
+  }
 </style>
